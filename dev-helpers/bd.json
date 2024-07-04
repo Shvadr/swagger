@@ -1,0 +1,217 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "version": "1.0.6"
+    },
+    "servers": [
+      {
+        "url": "http://193.19.100.32:7000/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "roles",
+        "description": "Роли / Направления подготовки в лагере"
+      },
+      {
+        "name": "candidate",
+        "description": "Кандидат на участие в ИТ Лагере Т1"
+      }
+    ],
+    "paths": {
+      "/api/get-roles": {
+        "get": {
+          "tags": [
+            "roles"
+          ],
+          "summary": "Получить перечень ролей - направлений подготовки лагеря",
+          "description": "Получить перечень ролей",
+          "operationId": "get-roles",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/Roles"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value"
+            }
+          }
+        }
+      },
+      "/api/sign-up": {
+        "post": {
+          "tags": [
+            "candidate"
+          ],
+          "summary": "Записаться в таблицу кандидатов",
+          "description": "Записать свои данные в таблицу кандидатов для повышения шансов на участие в ИТ Лагере",
+          "operationId": "sign-up",
+          "requestBody": {
+            "description": "Create new candidate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Candidate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      },
+      "/api/get-code": {
+        "get": {
+          "tags": [
+            "candidate"
+          ],
+          "summary": "Получить код",
+          "description": "Получить свой код, сгенерированный при записи в таблицу кандидатов",
+          "operationId": "get-code",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "description": "Email пользователя указанный при записи в таблицу кандидатов",
+              "required": true,
+              "explode": true,
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Code"
+              },
+              "example": "new@example.ru"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value"
+            }
+          }
+        }
+      },
+      "/api/set-status": {
+        "post": {
+          "tags": [
+            "candidate"
+          ],
+          "summary": "Установить статус записи в таблицу кандидатов",
+          "description": "Установить статус записи в таблицу кандидатов",
+          "operationId": "set-status",
+          "requestBody": {
+            "description": "Установить статус",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Roles": {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "Системный аналитик"
+              }
+            }
+          }
+        },
+        "Candidate": {
+          "type": "object",
+          "properties": {
+            "last_name": {
+              "type": "string",
+              "example": "Новый"
+            },
+            "first_name": {
+              "type": "string",
+              "example": "Пользователь"
+            },
+            "email": {
+              "type": "string",
+              "example": "new@example.ru"
+            },
+            "role": {
+              "type": "string",
+              "description": "Роль из списка ролей объекта Roles"
+            }
+          }
+        },
+        "Code": {
+          "type": "string",
+          "example": "d437cdee1218278ddf7c8d3fb6ae10ad"
+        },
+        "Status": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "example": "dGVzdDlAbG9jYWxob3N0OmQ0MzdjZGVlMTIxODI3OGRkZjdjOGQzZmI2YWUxMGFk",
+              "description": "Строка, закодированная в base64. Исходная строка \"email:code\", где email - электронный адрес, указанный при регистрации кандидата, code - код, полученный методом get-code."
+            },
+            "status": {
+              "type": "string",
+              "example": "increased"
+            }
+          }
+        }
+      }
+    }
+  }

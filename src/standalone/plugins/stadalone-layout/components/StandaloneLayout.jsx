@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Base64 from "./base64"
 
 class StandaloneLayout extends React.Component {
 
@@ -24,11 +25,12 @@ class StandaloneLayout extends React.Component {
 
     return (
       <Container className='swagger-ui'>
-        {Topbar ? <Topbar /> : null}
+        
         <BaseLayout />
-        <Row>
+        <Row><Base64></Base64>
           <Col>
             <OnlineValidatorBadge />
+            {/* <Topbar /> */}
           </Col>
         </Row>
       </Container>
